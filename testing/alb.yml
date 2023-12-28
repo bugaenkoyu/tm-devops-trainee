@@ -1,0 +1,111 @@
+Description: container cluster on ECS, loadbalancer, security groups and cloudwatch
+
+Resources:
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing 
+      Name: "tm-devops-trainee-alb"
+      Subnets:
+        - !ImportValue Subnet1
+        - !ImportValue Subnet2
+      SecurityGroups:
+        - !Ref LoadBalancerSecurityGroup
+
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for loadbalancer to services on ECS
+      VpcId: !ImportValue VPC
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+
+  LoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: LoadBalancer
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Protocol: HTTP
+      Port: 80
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref DefaultTargetGroup
+
+  LoadBalancerListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref DefaultTargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /*
+      ListenerArn: !Ref LoadBalancerListener
+      Priority: 1
+
+  DefaultTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+  #    Name: default
+  #    VpcId: !ImportValue VPC
+  #    Protocol: 'HTTP'
+  #    Port: '80'
+      HealthCheckIntervalSeconds: 200
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !ImportValue VPC
+      TargetType: ip #changed
+
+  ContainerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup      
+    Properties:
+     VpcId: !ImportValue VPC
+     GroupDescription: for ecs containers
+     SecurityGroupIngress:
+       - SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+        # IpProtocol: -1
+         IpProtocol: tcp
+         FromPort: 0
+         ToPort: 65535
+         
+  
+
+Outputs:
+  
+  Listener:
+    Description: listener port 80
+    Value: !Ref LoadBalancerListener
+    Export:
+      Name: 'Listener'
+
+  ContainerSecurityGroup:
+    Description: container security group
+    Value: !Ref ContainerSecurityGroup
+    Export:
+      Name: 'ContainerSecurityGroup'
+
+  LoadBalancerDNS:
+    Description: Domain name for the loadbalancer
+    Value: !GetAtt LoadBalancer.DNSName
+    Export:
+      Name: 'DomainName'
+
+  LoadBalancer:
+    Description: Domain name for the loadbalancer
+    Value: !Ref LoadBalancer
+    Export:
+      Name: 'LoadBalancer'
+
+  DefaultTargetGroup:
+    Description: DefaultTargetGroup name 
+    Value: !Ref DefaultTargetGroup
+    Export:
+      Name: 'DefaultTargetGroup'
