@@ -5,26 +5,30 @@ Create a simple AWS infrastructure (CloudFormation) to deploy a basic web applic
 
 __Requirements:__
 
-___Amazon EFS:___
-    • Create an Amazon EFS file system named "tm-devops-trainee-efs."
-    • Ensure that the EFS file system is mounted on the ECS instances to store the HTML content.
-    • Use appropriate security settings for the EFS.
+___Amazon EFS:___ 
+*    Create an Amazon EFS file system named "tm-devops-trainee-efs."
+*    Ensure that the EFS file system is mounted on the ECS instances to store the HTML content.
+*    Use appropriate security settings for the EFS.
+
 ___Amazon ECS:___
-    • Define an ECS task definition that runs a Docker container.
-    • Use a public Docker image of Nginx web server.
-    • Mount the EFS file system to the container to serve the HTML content.
-    • Configure the ECS service to run 1 task.
+*    Define an ECS task definition that runs a Docker container.
+*    Use a public Docker image of Nginx web server.
+*    Mount the EFS file system to the container to serve the HTML content.
+*    Configure the ECS service to run 1 task.
+
 ___ALB:___
-    • Create an ALB named "tm-devops-trainee-alb."
-    • Configure the ALB listener on port 80 to forward traffic to the ECS service.
-    • Implement health checks on the ALB to ensure the ECS service's availability.
+*    Create an ALB named "tm-devops-trainee-alb."
+*    Configure the ALB listener on port 80 to forward traffic to the ECS service.
+*    Implement health checks on the ALB to ensure the ECS service's availability.
+
 ___Security Group:___
-    • Create security groups for both the ECS instances and the ALB.
-    • Allow incoming traffic on port 80 to the ECS instances from the ALB.
-    • Configure appropriate security settings for the ALB.
+*    Create security groups for both the ECS instances and the ALB.
+*    Allow incoming traffic on port 80 to the ECS instances from the ALB.
+*    Configure appropriate security settings for the ALB.
+
 ___Web Application:___
-    • Create a simple HTML page with the content: "Hello, Techmagic!"
-    • Upload this HTML page to the EFS file system.
+*    Create a simple HTML page with the content: "Hello, Techmagic!"
+*    Upload this HTML page to the EFS file system.
 
 __1. Create VPC template__
 Before creating an EFS template, you need to create a VPC template with two subnets and other necessary resources. For the Application Load Balancer to work correctly, two public subnets PublicSubnet1 and PublicSubnet2 are required. To make our container inaccessible from the Internet, we need to create two private subnets PrivateSubnet1 and PrivateSubnet2. You also need to create the necessary Route Tables and other services. Such as: InternetGateway, NatGatewayOne and NatGatewayTwo. In order to be able to use the values in other templates we need export it. 
@@ -70,5 +74,6 @@ echo "<!DOCTYPE html><html><head><title>Hello, Techmagic!</title></head><body><h
 ```
 Now, when we go to the Loadbalancer url, we will see the following inscription: Hello, Techmagic!
 ![Hello, Techmagic](./infrastructure/img/hello-techmagic.png)
+
 Going to CloudFormation, we see that the entire infrastructure has been created successfully!
 ![All infrastructure](./infrastructure/img/all-infra-create.png)
