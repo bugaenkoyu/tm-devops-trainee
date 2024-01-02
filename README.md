@@ -77,3 +77,31 @@ Now, when we go to the Loadbalancer url, we will see the following inscription: 
 
 Going to CloudFormation, we see that the entire infrastructure has been created successfully!
 ![All infrastructure](./infrastructure/img/all-infra-create.png)
+
+### How to create a stack
+In order to create a stack, you need to click the "Create stack" button in the CloudFormation section of AWS. 
+![Create Stack](./infrastructure/img/create-stack.png)
+
+After that, select the location from where the yaml template will be downloaded, select the file and proceed to the next step where we enter the stack name and can change the default values. 
+![Download template](./infrastructure/img/download-template.png)
+
+![Enter the stack name](./infrastructure/img/stack-name.png)
+
+Next, leave all the settings unchanged and click the Create button.
+This way you can deploy all our ready-made templates.
+
+### Create stack via CLI
+
+An alternative way to deploy templates is to install the AWS CLI. After installing the AWS CLI, we can deploy templates directly from the console using the following command, where we will only change the stack name and the path to the instruction file.
+
+```
+aws cloudformation create-stack  --stack-name <name> --template-body <file//:path-to-file.yml>
+```
+
+You can also use the CLI to check if there are any errors or conflicts in the template. To do this, use the following command:
+
+```
+aws cloudformation validate-template --template-body <file//:path-to-file.yml>
+```
+___My challenges___
+The biggest problem as for me was connecting the Load Balancer to the ECS. I spent a lot of time figuring out how they should interact with each other correctly. And in general, the task was not easy since it was the first time I worked with CloudFormation, but it was very interesting.

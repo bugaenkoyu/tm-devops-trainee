@@ -51,9 +51,3 @@ Outputs:
     Value: !Ref EFSFileSystemSecurityGroup
     Export:
       Name: 'EFSFileSystemSecurityGroup'
-#need delete
- # MyALBSecurityGroupId:
- #   Description: ALB Security Group ID
- #   Value: !GetAtt MyALBSecurityGroup.GroupId
- #   Export:
- #     Name: 'MyALBSecurityGroupId'

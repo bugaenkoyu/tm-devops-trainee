@@ -62,7 +62,7 @@ Resources:
       Tags:
         - Key: Name
           Value: PublicSubnet2
-
+  # Create private subnets PrivateSubnet1 and PrivateSubnet2 for secure container operation
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
@@ -82,20 +82,20 @@ Resources:
       Tags:
         - Key: Name
           Value: PrivateSubnet2
-
+  # Create an internet gateway
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
           Value: InternetGateway
-
+  # Connect the Internet Gateway to the VPC
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !Ref MyVPC
       InternetGatewayId: !Ref InternetGateway
-
+  # 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -107,7 +107,7 @@ Resources:
       RouteTableId: !Ref 'PublicRouteTable'
       DestinationCidrBlock: '0.0.0.0/0'
       GatewayId: !Ref 'InternetGateway'
-
+  # Create routing tables and connect them to public subnets
   PublicSubnetOneRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -120,7 +120,7 @@ Resources:
       SubnetId: !Ref PublicSubnet2
       RouteTableId: !Ref PublicRouteTable
 
-#Private 
+  # Create two Nat Gateways and connect them to public subnets
   NatGatewayOneAttachment:
     Type: AWS::EC2::EIP
     DependsOn: AttachGateway
@@ -141,7 +141,7 @@ Resources:
     Properties:
       AllocationId: !GetAtt NatGatewayTwoAttachment.AllocationId
       SubnetId: !Ref PublicSubnet2
-
+  # Create routing tables and connect them to private subnets
   PrivateRouteTableOne:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -174,7 +174,8 @@ Resources:
       SubnetId: !Ref PrivateSubnet2
 
 Outputs:
-  Vpc:
+  # Export value VpcId and private and public subnets
+  VpcId:
     Description: The ID of the VPC that this stack is deployed in
     Value: !Ref MyVPC
     Export:
