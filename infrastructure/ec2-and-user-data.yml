@@ -41,8 +41,8 @@ Resources:
 
           cat <<EOL > /home/ubuntu/.aws/credentials
           [default]
-          aws_access_key_id = AKIA3KBNMY3OL4234AW5
-          aws_secret_access_key = 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
+          aws_access_key_id = ffff
+          aws_secret_access_key = fff
           EOL
 
           curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
