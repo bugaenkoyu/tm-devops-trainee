@@ -42,6 +42,11 @@ Resources:
           PortMappings:
             - ContainerPort: 80
               Protocol: tcp
+          # Added a command to automatically create the index.html file
+          Command:
+            - "/bin/sh"
+            - "-c"
+            - "echo '<html> <head> <title>Hello, Techmagic!</title> </head><body> <h1>Hello, Techmagic!!</h1> <h2>The index.html file was automatically added</h2></body></html>' > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"
       Volumes:
         - Name: efs-volume
           EFSVolumeConfiguration:

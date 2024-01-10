@@ -105,3 +105,7 @@ aws cloudformation validate-template --template-body <file//:path-to-file.yml>
 ```
 ___My challenges___
 The biggest problem as for me was connecting the Load Balancer to the ECS. I spent a lot of time figuring out how they should interact with each other correctly. And in general, the task was not easy since it was the first time I worked with CloudFormation, but it was very interesting.
+
+### Creating the index.html automatically
+The ecs stack was finalized. In TaskDefinition, I added commands that automatically create an index.html file in the /usr/share/nginx/html/index.html folder. Now when we switch to DNS name loadbalancer, we see a greeting.
+![Avtomatically create index.html](./infrastructure/img/add-indexhtml.png)
